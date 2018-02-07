@@ -5,12 +5,6 @@ import rospy
 import actionlib
 from threading import Timer
 import time
-import sys, traceback
-import os
-
-traceback_template = '''Traceback (most recent call last):
-  File "%(filename)s", line %(lineno)s, in %(name)s
-%(type)s: %(message)s\n''' # Skipping the "actual line" item
 
 from flexbe_core.logger import Logger
 
@@ -25,19 +19,15 @@ class ProxyActionClient(object):
     _result = {}
     _feedback = {}
 
-    def __init__(self, topics = {}, enter_wait_duration=0.0):
+    def __init__(self, topics = {}, wait_duration=10.0):
         """
         Initializes the proxy with optionally a given set of clients.
 
-        @param topics: A dictionary containing a collection of topic - message type pairs.
-        @param enter_wait_duration:  double - seconds to wait to connect on enter
+        @param topics        : A dictionary containing a collection of topic - message type pairs.
+        @param wait_duration :  double - seconds to wait to connect on enter
         """
 
         # Try to connect on startup
-        wait_duration = 10 # default on startup
-        if (enter_wait_duration > 0):
-            wait_duration = enter_wait_duration
-
         for topic, msg_type in topics.iteritems():
             self._msg_types[topic] = msg_type
             self.setupClient(topic, msg_type, wait_duration)
