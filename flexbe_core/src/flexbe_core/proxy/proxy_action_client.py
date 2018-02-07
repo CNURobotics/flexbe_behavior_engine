@@ -5,6 +5,12 @@ import rospy
 import actionlib
 from threading import Timer
 import time
+import sys, traceback
+import os
+
+traceback_template = '''Traceback (most recent call last):
+  File "%(filename)s", line %(lineno)s, in %(name)s
+%(type)s: %(message)s\n''' # Skipping the "actual line" item
 
 from flexbe_core.logger import Logger
 
@@ -15,22 +21,28 @@ class ProxyActionClient(object):
     """
     _clients = {}
 
+    _msg_types = {}
     _result = {}
     _feedback = {}
 
-    def __init__(self, topics = {}, wait_duration=10):
+    def __init__(self, topics = {}, enter_wait_duration=0.0):
         """
         Initializes the proxy with optionally a given set of clients.
 
-        @type topics: dictionary string - message class
-        @param topics: A dictionay containing a collection of topic - message type pairs.
+        @param topics: A dictionary containing a collection of topic - message type pairs.
+        @param enter_wait_duration:  double - seconds to wait to connect on enter
         """
 
+        # Try to connect on startup
+        wait_duration = 10 # default on startup
+        if (enter_wait_duration > 0):
+            wait_duration = enter_wait_duration
+
         for topic, msg_type in topics.iteritems():
-            self.setupClient(topic, msg_type,wait_duration)
+            self._msg_types[topic] = msg_type
+            self.setupClient(topic, msg_type, wait_duration)
 
-
-    def setupClient(self, topic, msg_type, wait_duration=10):
+    def setupClient(self, topic, msg_type, wait_duration=10.):
         """
         Tries to set up an action client for calling it later.
 
@@ -40,7 +52,7 @@ class ProxyActionClient(object):
         @type msg_type: msg type
         @param msg_type: The type of messages of this action client.
 
-        @type wait_duration: int
+        @type wait_duration: float
         @param wait_duration: Defines how long to wait for the given client if it is not available right now.
         """
         if topic not in ProxyActionClient._clients:
@@ -74,7 +86,7 @@ class ProxyActionClient(object):
         @param goal: The request to send to the action server.
         """
         if topic not in ProxyActionClient._clients:
-            raise ValueError('ProxyActionClient: topic %s not yet registered!' % topic)
+            raise ValueError('ProxyActionClient - topic %s not yet registered!' % topic)
 
         ProxyActionClient._result[topic] = None
         ProxyActionClient._feedback[topic] = None
