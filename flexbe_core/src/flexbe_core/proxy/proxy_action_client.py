@@ -23,8 +23,10 @@ class ProxyActionClient(object):
         """
         Initializes the proxy with optionally a given set of clients.
 
-        @param topics        : A dictionary containing a collection of topic - message type pairs.
-        @param wait_duration :  double - seconds to wait to connect on enter
+        @type topics        : dictionary
+        @param topics       : A dictionary containing a collection of topic - message type pairs.
+        @type wait_duration : float
+        @param wait_duration: Defines how long to wait for the given client if it is not available right now.
         """
 
         # Try to connect on startup
@@ -47,6 +49,11 @@ class ProxyActionClient(object):
         """
         if topic not in ProxyActionClient._clients:
             client = actionlib.SimpleActionClient(topic, msg_type)
+
+            # Register this client with proxy
+            ProxyActionClient._clients[topic] = client
+
+            # Attempt to validate the connection
             t = Timer(1, self._print_wait_warning, [topic])
             t.start()
             available = client.wait_for_server(rospy.Duration.from_sec(wait_duration))
@@ -58,9 +65,8 @@ class ProxyActionClient(object):
                 warning_sent = True
 
             if not available:
-                Logger.logerr("Action client %s timed out!" % topic)
+                Logger.logerr("Action client %s timed out before connection made!" % topic)
             else:
-                ProxyActionClient._clients[topic] = client
                 if warning_sent:
                     Logger.loginfo("Finally found action client %s..." % (topic))
 
@@ -78,6 +84,11 @@ class ProxyActionClient(object):
         if topic not in ProxyActionClient._clients:
             raise ValueError('ProxyActionClient - topic %s not yet registered!' % topic)
 
+        # Verify that there is an action server ready to process the goal
+        if not ProxyActionClient._clients[topic].wait_for_server(rospy.Duration.from_sec(0.0)):
+            raise ValueError('ProxyActionClient - topic %s is not yet connected to server!' % topic)
+
+        # Clear prior results
         ProxyActionClient._result[topic] = None
         ProxyActionClient._feedback[topic] = None
 
