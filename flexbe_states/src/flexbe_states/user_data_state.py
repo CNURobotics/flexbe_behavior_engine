@@ -17,7 +17,6 @@ class UserDataState(EventState):
     #> data                User data
 
     <= done                Created the user data
-    <= param_error         Configuration error - no data set
     '''
 
 
@@ -25,7 +24,7 @@ class UserDataState(EventState):
         '''
         Constructor
         '''
-        super(UserDataState, self).__init__( output_keys=["data"], outcomes=["done","param_err"])
+        super(UserDataState, self).__init__( output_keys=["data"], outcomes=["done"])
 
         self._my_data = data
         self._return_code = None
@@ -44,4 +43,4 @@ class UserDataState(EventState):
           userdata.data = self._my_data
           self._return_code = 'done'
         except:
-          self._return_code = 'param_error'
+            raise ValueError('UserDataState %s - invalid data ' % self.name)
