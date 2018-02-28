@@ -35,7 +35,7 @@ class SubscriberState(EventState):
 		'''
 		super(SubscriberState, self).__init__(outcomes=['received', 'unavailable'],
 											output_keys=['message'])
-		
+
 		self._topic = topic
 		self._blocking = blocking
 		self._clear = clear
@@ -49,21 +49,22 @@ class SubscriberState(EventState):
 			self._connected = True
 		else:
 			Logger.logwarn('Topic %s for state %s not yet available.\nFound: %s\nWill try again when entering the state...' % (self._topic, self.name, str(msg_topic)))
-		
-		
+
+
 	def execute(self, userdata):
 		'''
 		Execute this state
 		'''
 		if not self._connected:
+			userdata.message = None
 			return 'unavailable'
 
 		if self._sub.has_msg(self._topic) or not self._blocking:
 			userdata.message = self._sub.get_last_msg(self._topic)
 			self._sub.remove_last_msg(self._topic)
 			return 'received'
-			
-	
+
+
 	def on_enter(self, userdata):
 		if not self._connected:
 			(msg_path, msg_topic, fn) = rostopic.get_topic_type(self._topic)
