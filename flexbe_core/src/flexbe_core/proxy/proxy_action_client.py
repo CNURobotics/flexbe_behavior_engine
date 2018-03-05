@@ -85,7 +85,7 @@ class ProxyActionClient(object):
             raise ValueError('ProxyActionClient - topic %s not yet registered!' % topic)
 
         # Verify that there is an action server ready to process the goal
-        if not ProxyActionClient._clients[topic].wait_for_server(rospy.Duration.from_sec(0.0)):
+        if not ProxyActionClient._clients[topic].wait_for_server(rospy.Duration.from_sec(0.0001)):
             raise ValueError('ProxyActionClient - topic %s is not yet connected to server!' % topic)
 
         # Clear prior results
