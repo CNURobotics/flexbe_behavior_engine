@@ -2,6 +2,26 @@
 Changelog for package flexbe_onboard
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2019-06-02)
+------------------
+* Merge pull request `#72 <https://github.com/team-vigir/flexbe_behavior_engine/issues/72>`_ from mgruhler/fix/filemodes
+  fix filemodes: those files should not be executable
+* fix filemodes: those files should not be executable
+* Merge remote-tracking branch 'origin/feature/sub_parameters' into develop
+* Bump required flexbe_app version
+* Merge remote-tracking branch 'origin/master' into develop
+* Contributors: Matthias Gruhler, Philipp Schillinger
+
+1.1.2 (2019-04-09)
+------------------
+* Merge remote-tracking branch 'origin/develop'
+* [flexbe_onboard] Change input parsing warning to debug level
+* Merge pull request `#70 <https://github.com/team-vigir/flexbe_behavior_engine/issues/70>`_ from henroth/bugfix/fix_incorrect_warning_format
+  Fix formatting error that crashes behavior construction
+* In certain cases if an input key has a weird value (such as 0_degrees) it can cause an exception that prevents the behavior from being built. This is due to incorrect formatting in a warning message. This fixes the warning message formatting
+* Merge remote-tracking branch 'origin/master' into develop
+* Contributors: Henry Roth, Philipp Schillinger
+
 1.1.1 (2018-12-18)
 ------------------
 * Merge remote-tracking branch 'origin/master' into develop

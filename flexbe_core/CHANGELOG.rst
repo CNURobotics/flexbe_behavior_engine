@@ -2,6 +2,26 @@
 Changelog for package flexbe_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2019-06-02)
+------------------
+* Merge pull request `#72 <https://github.com/team-vigir/flexbe_behavior_engine/issues/72>`_ from mgruhler/fix/filemodes
+  fix filemodes: those files should not be executable
+* fix filemodes: those files should not be executable
+* Merge remote-tracking branch 'origin/feature/sub_parameters' into develop
+* Bump required flexbe_app version
+* [flexbe_core] Accept explicit definition of parameters for included behaviors
+* Merge remote-tracking branch 'origin/master' into develop
+* Contributors: Matthias Gruhler, Philipp Schillinger
+
+1.1.2 (2019-04-09)
+------------------
+* Merge remote-tracking branch 'origin/develop'
+* Merge pull request `#66 <https://github.com/team-vigir/flexbe_behavior_engine/issues/66>`_ from ksm0709/add_remove_result
+  add remove_result function to proxy action client
+* add remove_result function to proxy action client
+* Merge remote-tracking branch 'origin/master' into develop
+* Contributors: Philipp Schillinger, taehokang
+
 1.1.1 (2018-12-18)
 ------------------
 * Merge remote-tracking branch 'origin/develop'
